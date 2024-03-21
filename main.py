@@ -43,6 +43,7 @@ def getDates(ticker_symbol, period):
 
     for i in value: #goes through and substrings all of the dates
         dates.append(i[0:11])
+    
     #cleans output
     dates.pop(0)
     dates.pop(len(dates) - 1)
@@ -56,9 +57,6 @@ def main():
     breakdown = [] #stores the portfolio value of each investment for the pie chart
     percentValue = [] #stores the percentage value of how much each stock uses for pie chart
     labels = [] #stores the labels of the stocks for the pie chart
-
-    print(getHistory("MSFT", "1mo"))
-    print(getDates("MSFT", "1mo"))
 
     while True:
         print("\n1. Add Transaction")
