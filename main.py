@@ -2,7 +2,7 @@ import yfinance as yf
 import matplotlib.pyplot as plt #needed for pie chart
 import numpy as np #needed for pie chart
 
-def isfloat(string): #a function that will check if a string is a float, with a boolean return
+def isfloat(string): #copied a function that will check if a string is a float, with a boolean return
     try:
         float(string)
         return True
@@ -25,8 +25,29 @@ def getHistory(ticker_symbol, period): #created a method for getting the history
                 prices.append(i)
             keep = not keep
 
+    prices.pop(len(prices) - 1) #cleans output at the end
+
     return prices #returns a list of prices for the given duration
 
+def getDates(ticker_symbol, period):
+    stock = yf.Ticker(ticker_symbol)  # creates a ticker in the method
+    hist = stock.history(period=period)  # gets the stock history from a given period
+    dates = []  # creates a list that will store the prices over the time period
+
+    # removes the headers of the given history data and isolates the values columns
+    value = (str(hist).replace("                                 Open        High  ...  Dividends  Stock Splits",
+                               "\b")).replace(
+        "Date                                               ...                         ", "\b").split(" ")
+    value = stock.history(period='1mo')['Open'] #gets the column stock data to grab the dates
+    value = str(value).split("\n")
+
+    for i in value: #goes through and substrings all of the dates
+        dates.append(i[0:11])
+    #cleans output
+    dates.pop(0)
+    dates.pop(len(dates) - 1)
+
+    return dates #returns a list with all of the dates from the requested time period
 
 def main():
     portfolio = {}  #map to keep track of transactions
@@ -36,7 +57,8 @@ def main():
     percentValue = [] #stores the percentage value of how much each stock uses for pie chart
     labels = [] #stores the labels of the stocks for the pie chart
 
-    getHistory("MSFT", "1mo")
+    print(getHistory("MSFT", "1mo"))
+    print(getDates("MSFT", "1mo"))
 
     while True:
         print("\n1. Add Transaction")
