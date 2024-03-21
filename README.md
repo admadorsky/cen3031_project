@@ -21,7 +21,11 @@ Display Portfolio option.
   Prints total value of portfolio
   
   Prints total profit/loss
-  
+
+  Creates a Pie chart with the purchases the user would like to make
+
+  Creates two methods, isFloat checks if a string is a float and getHistory returns a list of a stock's price history for the duration inputted by the user, going to be used
+  in portfolio tracking in future iterations. 
 
 Questions:
 
