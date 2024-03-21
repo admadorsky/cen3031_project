@@ -24,8 +24,7 @@ Display Portfolio option.
 
   Creates a Pie chart with the purchases the user would like to make
 
-  Creates two methods, isFloat checks if a string is a float and getHistory returns a list of a stock's price history for the duration inputted by the user, going to be used
-  in portfolio tracking in future iterations. 
+  Creates three methods, isFloat checks if a string is a float and getHistory returns a list of a stock's price history for the duration inputted by the user, going to be used in portfolio tracking in future iterations. Also created a method to return the dates of a given period to be used in graph creation for portfolio tool later on. 
 
 Questions:
 
