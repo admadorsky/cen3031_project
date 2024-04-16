@@ -1,5 +1,6 @@
 import logo from './logo.png'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
+
 
 const Navbar = () => {
     return ( 
@@ -7,8 +8,12 @@ const Navbar = () => {
             <img src={ logo } alt="logo" height="32" width="32" />
             <h1>Beetlejuice</h1>
             <div className="links">
-                <Link to="/">Home</Link>
-                <Link to="/portfolio">My portfolio</Link>
+                <NavLink activeStyle={{border: "2px solid #828196"}} exact to="/">
+                    Home
+                </NavLink>
+                <NavLink activeStyle={{border: "2px solid #828196"}} exact to="/portfolio">
+                    My portfolio
+                </NavLink>
             </div>
         </nav>
     );

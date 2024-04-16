@@ -46,7 +46,7 @@ html {
 }
 .content h1, h2, h3, h4, h5, h6 {
   color: #cdccda;
-  margin-bottom: 20px;
+  padding-bottom: 6px;
 }
 .content body {
   color: #828196;
@@ -69,7 +69,6 @@ html {
 }
 .column {
   flex: 50%;
-  gap: 20px;
 }
 .chart {
   padding: 20px;
@@ -92,7 +91,6 @@ html {
   margin-bottom: 12px;
   margin-top: 8px;
   display: flex;
-  align-items: center;
   border-bottom: 2px solid #404155;
 }
 .value-preview {

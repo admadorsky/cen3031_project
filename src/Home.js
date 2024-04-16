@@ -1,6 +1,6 @@
 import React, { useState } from "react"
 import PieChart from "./components/PieChart"
-import {Data} from "./utils/Data"
+import { Data } from "./utils/Data"
 import { Link } from 'react-router-dom'
 
 const Home = () => {
