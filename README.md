@@ -1,35 +1,17 @@
-File to create portfolio
+Backend
 
-Background for the code.
+  - Backend approached with CRUD method: Create, Read, Update, Delete.
 
-Uses a map to store transaction id and transaction details.
+  - ./Flask/main.py has functionality for Read and Create. Update and Delete will be made in future versions
 
-portfolio[transaction_id] = [ticker_symbol, qty, buy_price, sell_price]
-
-- If not sold, sell price is current market price
-- Net_balance is variable to keep track of total profits
-
-portfolio value= QTY * current Price  
-
-Total Profits/Loss: Only counts closed positions  
-
-
-Display Portfolio option.
-
-  Returns each transaction
-  
-  Prints total value of portfolio
-  
-  Prints total profit/loss
-
-  Creates a Pie chart with the purchases the user would like to make
+  - Flask backend is set up to write database with sqlite to a json file (./Flask/instance/mydatabase.db)
 
 Frontend
 
-  /src contains all js, css, component, and util files that interact.
-  /public contains global-level assets.
-  package.json and package-lock.json contain dependencies for  building and testing
+  - Frontend moved to ./React directory
 
-  homepage is completed
+  - Frontend still using template data in ./React/src/utils/Data.js
 
-  next up are portfolio and add stock pages. these will have the most interaction with backend.
+  - Future versions will query Flask database for info
+
+  - Future versions will have interface to CRUD positions on the "My portfolio page"
