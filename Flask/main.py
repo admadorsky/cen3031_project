@@ -66,19 +66,59 @@ def create_position():
     except Exception as e:
         return jsonify({"message": str(e)}), 400
     
-    return jsonify({"message": "Position Added!"}), 201
+    return jsonify({"message": "Position Added."}), 201
 
 # C R |U| D
 # - update
+@app.route("/update_position/<int:position_id", methods=["PATCH"])
+def update_position(position_id):
+    position = Position.query.get(position_id)
 
-# function will go here to update existing positions
+    if not position:
+        return jsonify({"message": "Position not found."}), 404
+    
+    data = request.json
+    # modify position in db according to input passed as json
+    position.quantity = data.get("quantity", position.quantity)
+    position.buy_price = data.get("buyPrice", position.buy_price)
 
+    db.session.commit()
+
+    return jsonify({"message": "Position updated."}), 200
+
+# C R |U| D
+# - update (sell stock)
+@app.route("/sell_stock/<int:position_id>", methods=["PATCH"])
+def sell_stock(position_id):
+    position = Position.query.get(position_id)
+
+    if not position:
+        return jsonify({"message": "Position not found."}), 404
+    
+    data = request.json
+    if position.is_sold:
+        return jsonify({"message": "Position is already sold."})
+    
+    position.is_sold = True
+    position.sell_price = data.get("sellPrice", position.sell_price)
+
+    db.session.commit()
+
+    return jsonify({"message": "Position sold."}), 200
 
 # C R U |D|
 # - delete
+@app.route("/delete_position/<int:position_id>", methods=["DELETE"])
+def delete_position(position_id):
+    position = Position.query.get(position_id)
 
-# function will go here to delete existing positions
+    if not position:
+        return jsonify({"message": "Position not found."}), 404
     
+    db.session.delete(position)
+    db.session.commit()
+
+    return jsonify({"message": "Position deleted."}), 200
 
 if __name__ == "__main__":
     # spin up the database if it doesn't already exist

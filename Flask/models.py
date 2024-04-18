@@ -2,7 +2,7 @@ from config import db
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ticker = db.Column(db.String(5), unique=True, nullable=False)
+    ticker = db.Column(db.String(5), unique=False, nullable=False)
     quantity = db.Column(db.Float)
     buy_price = db.Column(db.Float)
     is_sold = db.Column(db.Boolean)
