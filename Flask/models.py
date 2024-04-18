@@ -5,7 +5,7 @@ class Position(db.Model):
     ticker = db.Column(db.String(5), unique=False, nullable=False)
     quantity = db.Column(db.Float)
     buy_price = db.Column(db.Float)
-    is_sold = db.Column(db.Boolean)
+    is_sold = db.Column(db.String)
     sell_price = db.Column(db.Float)
 
     def to_json(self):

@@ -23,31 +23,31 @@ def create_position():
     sell_price = request.json.get("sellPrice")
 
     # verify that input exists for ticker, quantity, and buy price
-    if not ticker or not quantity or not buy_price:
-        return (
-            jsonify({"message": "You must inlcude a ticker, quantiy, and buy price."}),
-            400
-        )
+    # if not ticker or not quantity or not buy_price:
+    #     return (
+    #         jsonify({"message": "You must inlcude a ticker, quantity, and buy price."}),
+    #         400
+    #     )
     
     # if the stock is sold, verify that a sell price was specified
-    if is_sold and not sell_price:
-        return (
-            jsonify({"message": "If you indicate that the position is sold, you must include a sell price."}),
-            400
-        )
+    # if is_sold and not sell_price:
+    #     return (
+    #         jsonify({"message": "If you indicate that the position is sold, you must include a sell price."}),
+    #         400
+    #     )
     
     # generate a yf Ticker object and verify that the selected ticker exists
     stock = yf.Ticker(ticker)
     info = None
-    if (stock.info['regularMarketPrice'] == None):
-        return (
-            jsonify({"message": "Please enter a valid ticker symbol."}),
-            400
-        )
+    # if (stock.info['regularMarketPrice'] == None):
+    #    return (
+    #        jsonify({"message": "Please enter a valid ticker symbol."}),
+    #        400
+    #    )
     
     # assign current_price with either input or current market price, depending on is_sold selection
     current_price = 0.0
-    if not is_sold:
+    if is_sold != 'on':
         current_price = stock.history(period='1d')['Close'].iloc[-1]
     else:
         current_price = sell_price
@@ -70,7 +70,7 @@ def create_position():
 
 # C R |U| D
 # - update
-@app.route("/update_position/<int:position_id", methods=["PATCH"])
+@app.route("/update_position/<int:position_id>", methods=["PATCH"])
 def update_position(position_id):
     position = Position.query.get(position_id)
 
