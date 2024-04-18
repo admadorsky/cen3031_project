@@ -1,44 +1,41 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import PieChart from "./components/PieChart"
-import { Data } from "./utils/Data"
 import { Link } from 'react-router-dom'
 
 const Home = () => {
-    // state for piechart
-    const [userData, setUserData] = useState({
-        // chartjs requires an object: [labels, datasets]
-        // pull object from Data.js
-        labels: Data.map((data)=>data.ticker),
-        datasets: [{
-            label: "Value",
-            data: Data.map((data)=>data.value),
-            borderWidth: 0,
-            backgroundColor: [
-                'rgba(48, 241, 183, 95)',
-                'rgba(74, 201, 163, 97)',
-                'rgba(84, 157, 135, 62)',
-                'rgba(82, 117, 107, 46)',
-                'rgba(63, 72, 69, 28)'
-            ],
-            hoverOffset: 24,
-        }]
-    })
+
+    const [positions, setPositions] = useState([])
+
+    useEffect(() => {
+        fetchPositions()
+    }, [])
+
+    const fetchPositions = async () => {
+        const response = await fetch("http://127.0.0.1:5000/portfolio");
+        const fetchData = await response.json();
+        setPositions(fetchData.positions);
+      };
 
     // button click handling function
     const handleClick = () => {
         console.log('test')
     }
 
-    // parse data into separate vectors
-    let valueData = Data.map((data)=>data.value);
-
-    // add up a total portfolio value using Data.js
+    // add up a total portfolio value using database
     let portfolioValue = 0;
-    for (let i = 0; i < valueData.length; i++) {
-        portfolioValue += valueData[i];
+    let portfolioInvestment = 0;
+    for (let i = 0; i < positions.length; i++) {
+        portfolioValue += (positions[i].sellPrice * positions[i].quantity);
+        portfolioInvestment += (positions[i].buyPrice * positions[i].quantity);
     }
+
+    let portfolioGainLoss = portfolioValue - portfolioInvestment;
+
     // add separating commas. EX: 3200 -> 3,200
-    let portfolioValueString = portfolioValue.toLocaleString('en');
+    // portfolioValue = portfolioValue.toFixed(2)
+    // portfolioGainLoss = portfolioGainLoss.toFixed(2)
+    let portfolioValueString = portfolioValue.toLocaleString("en-US", {style:"currency", currency:"USD"});
+    let portfolioGainLossString = portfolioGainLoss.toLocaleString("en-US", {style:"currency", currency:"USD"});
 
     return (
         <div className="content">
@@ -48,7 +45,24 @@ const Home = () => {
                 <div className="block">
                         <p>Portfolio Distribution</p>
                         <div className="chart">
-                            <PieChart chartData={userData} />
+                            <PieChart chartData={{
+                                labels: positions.map((data) => (data.ticker)),
+                                datasets: [
+                                {
+                                    label: "Value",
+                                    data: positions.map((data)=>(data.sellPrice*data.quantity)),
+                                    borderWidth: 0,
+                                    hoverOffset: 24,
+                                    backgroundColor: [
+                                        'rgba(48, 241, 183, 95)',
+                                        'rgba(74, 201, 163, 97)',
+                                        'rgba(84, 157, 135, 62)',
+                                        'rgba(82, 117, 107, 46)',
+                                        'rgba(63, 72, 69, 28)'
+                                    ]
+                                }
+                                ]
+                            }} />
                         </div>
                     </div>
                 </div>
@@ -56,27 +70,19 @@ const Home = () => {
                     <div className="block">
                         <p>Portfolio Value</p>
                         <div className="box-content">
-                            <h1 style={{
-                                color: "#828196",
-                                fontSize: "64px"
-                            }}>$</h1>
                             <h1 style={{ fontSize: "64px" }}>
                                 { portfolioValueString }
                             </h1>
                         </div>
-                        <Link to="/new-stock">
-                            <button className="button">
-                                Add New Stock
-                            </button>
-                        </Link>    
+                        <p>Total Gain/Loss: {portfolioGainLossString}</p> 
                     </div>
                     <div className="block">
                         <p>Positions</p>
                         <div className="box-content" style={{display: "block"}}>
-                            {Data.map((data) => (
+                            {positions.map((data) => (
                                 <div className="position-preview" key={data.id}>
                                     <h3>{ data.ticker }</h3>
-                                    <p className="value-preview">${ data.value } </p>
+                                    <p className="value-preview">${ (data.sellPrice * data.quantity).toFixed(2) } </p>
                                 </div>
                             ))}
                         </div>

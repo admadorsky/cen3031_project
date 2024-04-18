@@ -107,7 +107,10 @@ th {
   padding: 6px;
   padding-bottom: 12px;
 }
-tr:hover {
+tr.sold {
+  background-color: #0d0d1141;
+}
+tr.market:hover {
   background-color: #404155;
 }
 .tbutton-container {
@@ -116,6 +119,7 @@ tr:hover {
   align-items: stretch;
 }
 .tbutton {
+  margin: 4px;
   display: inline-flex;
   align-items: center;
   padding: 6px 0;

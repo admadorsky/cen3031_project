@@ -1,11 +1,11 @@
-const PositionsList = ({positions, updateCallback}) => {
+const PositionsList = ({positions, updatePosition, updateCallback}) => {
 
     const onDelete = async (id) => {
         try {
             const options = {
                 method: "DELETE"
             }
-            const response = await fetch('http://127.0.0.1:5000/delete_position/${id}', options)
+            const response = await fetch(`http://127.0.0.1:5000/delete_position/${id}`, options)
 
             if (response.status === 200) {
                 updateCallback()
@@ -34,18 +34,14 @@ const PositionsList = ({positions, updateCallback}) => {
                     </thead>
                     <tbody>
                         {positions.map((position) => (
-                            <tr key={position.id}>
+                            <tr key={position.id} className={position.isSold ? "sold" : "market"}>
                                 <td>{position.ticker}</td>
                                 <td>{position.quantity}</td>
                                 <td>${position.buyPrice}</td>
-                                <td>${(((position.sellPrice)*(position.quantity))-((position.buyPrice)*(position.quantity))).toFixed(2)}</td>
+                                <td>${(((position.sellPrice)*(position.quantity))-((position.buyPrice)*(position.quantity))).toFixed(2)}{position.isSold ? " (sold)" : ""}</td>
                                 <td className="tbutton-container">
-                                    <button className="tbutton">
+                                    <button className="tbutton" onClick={() => updatePosition(position)}>
                                         <span className="material-symbols-outlined">edit</span>
-                                    </button>
-                                    <button className="tbutton">
-                                        Sell
-                                        <span className="material-symbols-outlined" style={{paddingLeft: "4px"}}>sell</span>
                                     </button>
                                     <button className="tbutton red" onClick={() => onDelete(position.id)}>
                                         <span className="material-symbols-outlined">delete</span>

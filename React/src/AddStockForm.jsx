@@ -1,11 +1,13 @@
 import { useState } from 'react'
 
-const AddStockForm = ({updateCallback}) => {
-    const [ticker, setTicker] = useState("")
-    const [quantity, setQuantity] = useState()
-    const [buyPrice, setBuyPrice] = useState()
-    const [isSold, setIsSold] = useState("")
-    const [sellPrice, setSellPrice] = useState()
+const AddStockForm = ({ existingPosition = {}, updateCallback }) => {
+    const [ticker, setTicker] = useState(existingPosition.ticker || "")
+    const [quantity, setQuantity] = useState(existingPosition.quantity || 0)
+    const [buyPrice, setBuyPrice] = useState(existingPosition.buyPrice || 0)
+    const [isSold, setIsSold] = useState(existingPosition.isSold || 0)
+    const [sellPrice, setSellPrice] = useState(existingPosition.sellPrice || 0)
+
+    const updating = Object.entries(existingPosition).length !== 0
 
     const onSubmit = async (e) => {
         e.preventDefault()
@@ -18,9 +20,9 @@ const AddStockForm = ({updateCallback}) => {
             sellPrice
         }
 
-        const url = "http://127.0.0.1:5000/create_position"
+        const url = "http://127.0.0.1:5000/" + (updating ? `update_position/${existingPosition.id}` : "create_position")
         const options = {
-            method: "POST",
+            method: updating ? "PATCH" : "POST",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -31,7 +33,7 @@ const AddStockForm = ({updateCallback}) => {
             const data = await response.json()
             alert(data.message)
         } else {
-            // success
+            updateCallback()
         }
     }
 
@@ -71,7 +73,7 @@ const AddStockForm = ({updateCallback}) => {
                         type="checkbox"
                         id="isSold"
                         value={isSold}
-                        onChange={(e) => setIsSold(e.target.value)}
+                        onChange={(e) => setIsSold(e.target.checked)}
                     />
                 </div>
                 <div>
@@ -84,7 +86,7 @@ const AddStockForm = ({updateCallback}) => {
                     />
                 </div>
                 <button type="submit" className='button' style={{float: "right"}}>
-                    Add Stock
+                    {updating ? "Submit" : "Add Stock"}
                 </button>
             </form>
         </div>

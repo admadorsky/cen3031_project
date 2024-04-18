@@ -2,10 +2,10 @@ from config import db
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    ticker = db.Column(db.String(5), unique=False, nullable=False)
+    ticker = db.Column(db.String(5))
     quantity = db.Column(db.Float)
     buy_price = db.Column(db.Float)
-    is_sold = db.Column(db.String)
+    is_sold = db.Column(db.Integer)
     sell_price = db.Column(db.Float)
 
     def to_json(self):

@@ -8,6 +8,14 @@ import yfinance as yf
 @app.route("/portfolio", methods=["GET"])
 def get_positions():
     positions = Position.query.all()
+
+    for position in positions:
+        if not position.is_sold:
+            stock = yf.Ticker(position.ticker)
+            position.sell_price = stock.history(period='1d')['Close'].iloc[-1]
+
+    db.session.commit()
+
     # convert list of positions as python objects to json, put in new list
     json_positions = list(map(lambda x: x.to_json(), positions))
     return jsonify({"positions": json_positions})
@@ -23,31 +31,32 @@ def create_position():
     sell_price = request.json.get("sellPrice")
 
     # verify that input exists for ticker, quantity, and buy price
-    # if not ticker or not quantity or not buy_price:
-    #     return (
-    #         jsonify({"message": "You must inlcude a ticker, quantity, and buy price."}),
-    #         400
-    #     )
+    if not ticker or not quantity or not buy_price:
+        return (
+            jsonify({"message": "You must inlcude a ticker, quantity, and buy price."}),
+            400
+        )
     
     # if the stock is sold, verify that a sell price was specified
-    # if is_sold and not sell_price:
-    #     return (
-    #         jsonify({"message": "If you indicate that the position is sold, you must include a sell price."}),
-    #         400
-    #     )
+    if ( is_sold == 1 ) and not sell_price:
+        return (
+            jsonify({"message": "If you indicate that the position is sold, you must include a sell price."}),
+            400
+        )
     
     # generate a yf Ticker object and verify that the selected ticker exists
     stock = yf.Ticker(ticker)
     info = None
-    # if (stock.info['regularMarketPrice'] == None):
-    #    return (
-    #        jsonify({"message": "Please enter a valid ticker symbol."}),
-    #        400
-    #    )
+    info = stock.history(period = '7d', interval = '1d')
+    if not ( len(info) > 0 ):
+        return (
+            jsonify({"message": "Please enter a valid ticker."}),
+            400
+        )
     
     # assign current_price with either input or current market price, depending on is_sold selection
     current_price = 0.0
-    if is_sold != 'on':
+    if is_sold != 1:
         current_price = stock.history(period='1d')['Close'].iloc[-1]
     else:
         current_price = sell_price
