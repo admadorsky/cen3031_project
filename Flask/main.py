@@ -8,6 +8,11 @@ import yfinance as yf
 @app.route("/portfolio", methods=["GET"])
 def get_positions():
     positions = Position.query.all()
+    
+    users = User.query.all()
+    for user in users:
+        if user.is_active:
+            active_user = user
 
     for position in positions:
         if not position.is_sold:
@@ -17,7 +22,11 @@ def get_positions():
     db.session.commit()
 
     # convert list of positions as python objects to json, put in new list
-    json_positions = list(map(lambda x: x.to_json(), positions))
+    json_positions = []
+    for position in positions:
+        if position.user == active_user.id:
+            json_positions.append(position.to_json())
+
     return jsonify({"positions": json_positions})
 
 # |C| R U D
@@ -29,6 +38,11 @@ def create_position():
     buy_price = request.json.get("buyPrice")
     is_sold = request.json.get("isSold")
     sell_price = request.json.get("sellPrice")
+
+    users = User.query.all()
+    for user in users:
+        if user.is_active:
+            active_user = user
 
     # verify that input exists for ticker, quantity, and buy price
     if not ticker or not quantity or not buy_price:
@@ -62,7 +76,8 @@ def create_position():
         current_price = sell_price
 
     # create a database entry object for new position
-    new_position = Position(ticker=ticker,
+    new_position = Position(user=active_user.id,
+                            ticker=ticker,
                             quantity=quantity,
                             buy_price=buy_price,
                             is_sold=is_sold,
@@ -94,26 +109,6 @@ def update_position(position_id):
     db.session.commit()
 
     return jsonify({"message": "Position updated."}), 200
-
-# C R |U| D
-# - update (sell stock)
-@app.route("/sell_stock/<int:position_id>", methods=["PATCH"])
-def sell_stock(position_id):
-    position = Position.query.get(position_id)
-
-    if not position:
-        return jsonify({"message": "Position not found."}), 404
-    
-    data = request.json
-    if position.is_sold:
-        return jsonify({"message": "Position is already sold."})
-    
-    position.is_sold = True
-    position.sell_price = data.get("sellPrice", position.sell_price)
-
-    db.session.commit()
-
-    return jsonify({"message": "Position sold."}), 200
 
 # C R U |D|
 # - delete

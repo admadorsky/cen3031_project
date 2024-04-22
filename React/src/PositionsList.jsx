@@ -34,11 +34,11 @@ const PositionsList = ({positions, updatePosition, updateCallback}) => {
                     </thead>
                     <tbody>
                         {positions.map((position) => (
-                            <tr key={position.id} className={position.isSold ? "sold" : "market"}>
+                            <tr key={position.id} className={position.isSold === "1" ? "sold" : "market"}>
                                 <td>{position.ticker}</td>
                                 <td>{position.quantity}</td>
                                 <td>${position.buyPrice}</td>
-                                <td>${(((position.sellPrice)*(position.quantity))-((position.buyPrice)*(position.quantity))).toFixed(2)}{position.isSold ? " (sold)" : ""}</td>
+                                <td>${(((position.sellPrice)*(position.quantity))-((position.buyPrice)*(position.quantity))).toFixed(2)}{position.isSold === "1" ? " (sold)" : ""}</td>
                                 <td className="tbutton-container">
                                     <button className="tbutton" onClick={() => updatePosition(position)}>
                                         <span className="material-symbols-outlined">edit</span>

@@ -39,6 +39,8 @@ const Portfolio = () => {
         fetchPositions()
     }
 
+    console.log(positions)
+
     return (
         <div className='portfolio'>
             <PositionsList positions={positions} updatePosition={openEditModal} updateCallback={onUpdate} />

@@ -2,6 +2,7 @@ from config import db
 
 class Position(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    user = db.Column(db.Integer)
     ticker = db.Column(db.String(5))
     quantity = db.Column(db.Float)
     buy_price = db.Column(db.Float)
@@ -11,6 +12,7 @@ class Position(db.Model):
     def to_json(self):
         return {
             "id": self.id,
+            "user": self.user,
             "ticker": self.ticker,
             "quantity": self.quantity,
             "buyPrice": self.buy_price,

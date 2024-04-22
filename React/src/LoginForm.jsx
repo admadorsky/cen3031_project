@@ -94,7 +94,7 @@ const LoginForm = () => {
             <div className='row'>
                 <div className='column'>
                     <div className='block'>
-                    <h3>Returning User</h3>
+                    <h3 style={{"paddingBottom": "12px"}}>Returning User</h3>
                         <form onSubmit={onSubmit}>
                             <div>
                                 <label htmlFor="username">Username:</label>
@@ -108,7 +108,7 @@ const LoginForm = () => {
                             <div>
                                 <label htmlFor="password">Password:</label>
                                 <input
-                                    type="text"
+                                    type="password"
                                     id="password"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -122,7 +122,7 @@ const LoginForm = () => {
                 </div>
                 <div className='column'>
                     <div className='block'>
-                    <h3>New User</h3>
+                    <h3 style={{"paddingBottom": "12px"}}>New User</h3>
                         <form onSubmit={onSubmitCreate}>
                             <div>
                                 <label htmlFor="createUsername">Username:</label>
@@ -136,7 +136,7 @@ const LoginForm = () => {
                             <div>
                                 <label htmlFor="createPassword">Password:</label>
                                 <input
-                                    type="text"
+                                    type="password"
                                     id="createPassword"
                                     value={createPassword}
                                     onChange={(e) => setCreatePassword(e.target.value)}
