@@ -1,0 +1,6 @@
+CREATE DATABASE engfinproject;
+USE engfinproject
+CREATE TABLE transactions (transactionCounter INT NOT NULL AUTO_INCREMENT, tickerSymbol VARCHAR(20) NOT NULL, transactionType VARCHAR(20) NOT NULL, transactionQuantity DECIMAL(45,1) NOT NULL, transactionPrice DECIMAL(45,1) NOT NULL, transactionDate DATE NOT NULL, userID VARCHAR(45) NOT NULL, PRIMARY KEY (transactionCounter));
+CREATE TABLE positions (positionsCounter INT NOT NULL AUTO_INCREMENT, tickerSymbol VARCHAR(20) NOT NULL, quantity DECIMAL(30,1) NOT NULL, userID VARCHAR(30) NOT NULL, PRIMARY KEY (positionsCounter));
+CREATE TABLE stock_table (tickerSymbol VARCHAR(20) NOT NULL, stockName VARCHAR(30) NOT NULL, PRIMARY KEY (tickerSymbol));
+CREATE TABLE user (userID VARCHAR(30) NOT NULL, userName VARCHAR(64) NOT NULL, userPasswordHash BINARY(64) NOT NULL, PRIMARY KEY (userID));
