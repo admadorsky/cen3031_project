@@ -1,4 +1,4 @@
-import yfinance as yf
+import yfinance as yf 
 import matplotlib.pyplot as plt #needed for pie chart
 import numpy as np #needed for pie chart
 
